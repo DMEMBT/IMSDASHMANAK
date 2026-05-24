@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>iPhone Stock · OTW · Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --border: #ececea;
+    --border-strong: #d8d8d4;
+    --text: #1a1a1a;
+    --text-2: #6b6b6b;
+    --text-3: #9a9a9a;
+    --green: #10b981;
+    --green-soft: #ecfdf5;
+    --green-text: #047857;
+    --amber: #f59e0b;
+    --amber-soft: #fffbeb;
+    --amber-text: #b45309;
+    --red: #ef4444;
+    --red-soft: #fef2f2;
+    --red-text: #b91c1c;
+    --blue: #3b82f6;
+    --blue-soft: #eff6ff;
+    --blue-text: #1d4ed8;
+    --purple: #8b5cf6;
+    --purple-soft: #f5f3ff;
+    --purple-text: #6d28d9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Manrope', -apple-system, sans-serif;
+    font-size: 14px; -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: "tnum"; }
+
+  header { border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 50; }
+  .header-inner { max-width: 1400px; margin: 0 auto; padding: 22px 32px; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 18px; }
+  h1 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 28px; letter-spacing: -0.02em; line-height: 1.1; }
+  h1 em { font-style: italic; color: var(--text-2); font-weight: 400; }
+  .subtitle { color: var(--text-2); font-size: 12px; margin-top: 5px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .live-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--green-soft); color: var(--green-text); padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  .live-pill.loading { background: var(--amber-soft); color: var(--amber-text); }
+  .live-pill.loading .live-dot { background: var(--amber); }
+  .live-pill.error { background: var(--red-soft); color: var(--red-text); }
+  .live-pill.error .live-dot { background: var(--red); animation: none; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .refresh-btn {
+    background: var(--surface); border: 1px solid var(--border-strong);
+    color: var(--text); padding: 6px 12px; border-radius: 7px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    font-family: 'Manrope';
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .refresh-btn:hover { border-color: var(--text); background: #fafaf7; }
+  .refresh-btn.spinning .refresh-icon { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .search-row { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .search { flex: 1; min-width: 240px; position: relative; }
+  .search input {
+    width: 100%; padding: 12px 16px 12px 42px;
+    border: 1px solid var(--border-strong); border-radius: 10px;
+    background: var(--surface); font-family: 'Manrope'; font-size: 14px;
+    color: var(--text); outline: none;
+  }
+  .search input:focus { border-color: var(--text); box-shadow: 0 0 0 4px rgba(0,0,0,0.05); }
+  .search::before { content: "⌕"; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 18px; }
+
+  .filter-dropdowns {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 12px; margin-bottom: 4px;
+  }
+  .dd-group { display: flex; flex-direction: column; gap: 6px; }
+  .dd-group label { font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.12em; text-transform: uppercase; }
+  .filter-dd {
+    width: 100%; padding: 11px 14px;
+    border: 1px solid var(--border-strong); border-radius: 10px;
+    background: var(--surface); font-family: 'Manrope'; font-size: 13px; font-weight: 500;
+    color: var(--text); cursor: pointer; outline: none;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b6b6b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    padding-right: 38px;
+  }
+  .filter-dd:focus { border-color: var(--text); box-shadow: 0 0 0 4px rgba(0,0,0,0.05); }
+  .filter-dd:hover { border-color: var(--text); }
+  .filter-dd.has-value { border-color: var(--text); background-color: #fafaf7; font-weight: 600; }
+
+  main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 60px; }
+
+  .result-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; color: var(--text-2); font-size: 12px; flex-wrap: wrap; gap: 8px; }
+  .result-info b { color: var(--text); font-family: 'JetBrains Mono'; font-weight: 700; }
+  .clear-btn { background: none; border: none; color: var(--blue-text); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Manrope'; }
+  .clear-btn:hover { text-decoration: underline; }
+
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 13px; }
+  thead { position: sticky; top: 0; z-index: 5; }
+  thead th {
+    text-align: left; font-size: 10px; font-weight: 700;
+    color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 12px 14px; background: #fafaf7;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+    cursor: pointer; user-select: none;
+  }
+  thead th:hover { background: #f3f3ee; color: var(--text); }
+  thead th.num { text-align: right; }
+  thead th .sort-arrow { color: var(--text-3); font-size: 9px; margin-left: 4px; }
+  thead th.sorted .sort-arrow { color: var(--text); }
+  thead th.sorted { color: var(--text); }
+
+  tbody tr { transition: background 0.1s; }
+  tbody tr:hover { background: #fafaf7; }
+  tbody tr.row-neg { background: #fffafa; }
+  tbody tr.row-neg:hover { background: #fef2f2; }
+  tbody tr.row-low { background: #fffdf5; }
+  tbody tr.row-low:hover { background: #fffbeb; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td.num { text-align: right; font-family: 'JetBrains Mono'; font-weight: 600; font-feature-settings: "tnum"; }
+  tbody td.name { color: var(--text); font-weight: 500; line-height: 1.35; max-width: 420px; }
+  tbody td.model { font-family: 'JetBrains Mono'; font-weight: 700; color: var(--blue-text); white-space: nowrap; }
+  tbody td.type { color: var(--purple-text); font-weight: 600; white-space: nowrap; font-size: 12px; }
+  td.stock-neg { color: var(--red) !important; }
+  td.stock-zero { color: var(--text-3) !important; }
+  td.stock-low { color: var(--amber-text) !important; }
+  td.empty-val { color: var(--text-3); font-weight: 400; }
+
+  .empty-row td { text-align: center; padding: 60px 20px; color: var(--text-3); }
+  .empty-row h3 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 22px; color: var(--text-2); margin-bottom: 6px; }
+
+  /* Setup screen for first-time use */
+  .setup-screen {
+    max-width: 600px; margin: 60px auto; padding: 40px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .setup-screen h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: 26px; margin-bottom: 12px; }
+  .setup-screen p { color: var(--text-2); margin-bottom: 16px; line-height: 1.5; }
+  .setup-screen input {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--border-strong);
+    border-radius: 8px; font-family: 'JetBrains Mono'; font-size: 12px;
+    margin-bottom: 12px; outline: none;
+  }
+  .setup-screen input:focus { border-color: var(--text); }
+  .setup-screen button {
+    background: var(--text); color: var(--bg); border: none;
+    padding: 12px 22px; border-radius: 8px;
+    font-family: 'Manrope'; font-weight: 600; font-size: 14px; cursor: pointer;
+  }
+  .setup-screen button:hover { background: var(--blue); }
+  .setup-error { color: var(--red-text); font-size: 12px; margin-top: 8px; }
+
+  @media (max-width: 720px) {
+    .header-inner, main { padding-left: 16px; padding-right: 16px; }
+    h1 { font-size: 22px; }
+    .filter-dropdowns { grid-template-columns: 1fr; }
+    table { font-size: 12px; }
+    tbody td { padding: 9px 10px; }
+    thead th { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+<header>
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <h1>iPhone Stock <em>· OTW · Live</em></h1>
+        <div class="subtitle">
+          <span class="live-pill" id="status-pill"><span class="live-dot"></span><span id="status-text">Connecting…</span></span>
+          <span id="updated-text"></span>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="refresh-btn" id="refresh-btn" onclick="loadData(true)">
+          <span class="refresh-icon">↻</span> Refresh
+        </button>
+        <button class="refresh-btn" onclick="changeUrl()" title="Change URL">⚙</button>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <div class="search">
+        <input type="text" id="search" placeholder="Search… (e.g. 14 Pro, polymer, 18127)" />
+      </div>
+    </div>
+
+    <div class="filter-dropdowns">
+      <div class="dd-group">
+        <label>iPhone Model</label>
+        <select id="model-dd" class="filter-dd">
+          <option value="">All Models</option>
+        </select>
+      </div>
+      <div class="dd-group">
+        <label>Part Type</label>
+        <select id="type-dd" class="filter-dd">
+          <option value="">All Types</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="result-info">
+    <span>Showing <b id="result-count">0</b> items · Auto-refresh every 30s</span>
+    <button class="clear-btn" id="clear-filters">Clear all filters</button>
+  </div>
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th data-sort="model">Model <span class="sort-arrow">↕</span></th>
+            <th data-sort="name">Description <span class="sort-arrow">↕</span></th>
+            <th data-sort="type">Type <span class="sort-arrow">↕</span></th>
+            <th class="num sorted" data-sort="stock">📦 Stock <span class="sort-arrow">↓</span></th>
+            <th class="num" data-sort="otwAir">✈ OTW Air <span class="sort-arrow">↕</span></th>
+            <th class="num" data-sort="otwSea">🚢 OTW Sea <span class="sort-arrow">↕</span></th>
+            <th class="num" data-sort="ftyStock">🏭 Fty <span class="sort-arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const DEFAULT_URL = "https://script.google.com/macros/s/AKfycbz5xQk_77CD6GJt7kjV3hyE5y1KpTyy1rGHZWJ9MRWX5K1rVXqJ9lIhp56CTQ_MHFN2/exec";
+const STORAGE_KEY = "ims_apps_script_url";
+const REFRESH_INTERVAL = 30000; // 30 seconds
+let APPS_SCRIPT_URL = "";
+let inventory = [];
+let refreshTimer = null;
+
+// ============================================================
+// SETUP / URL MANAGEMENT
+// ============================================================
+function init() {
+  // Use stored URL if user has overridden, else use default
+  APPS_SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || DEFAULT_URL;
+  document.getElementById("dashboard").style.display = "block";
+  loadData();
+  refreshTimer = setInterval(() => loadData(false), REFRESH_INTERVAL);
+}
+
+function saveUrl() {
+  const url = document.getElementById("url-input").value.trim();
+  const err = document.getElementById("setup-error");
+  if (!url.startsWith("https://script.google.com/macros/s/")) {
+    err.textContent = "Yeh valid Apps Script URL nahi hai. Format: https://script.google.com/macros/s/.../exec";
+    return;
+  }
+  localStorage.setItem(STORAGE_KEY, url);
+  location.reload();
+}
+
+function changeUrl() {
+  const newUrl = prompt("Apps Script URL update karna hai?\n\nCurrent:\n" + APPS_SCRIPT_URL + "\n\nNew URL paste karo (ya Cancel dabake reset karo):", APPS_SCRIPT_URL);
+  if (newUrl === null) return;
+  if (newUrl.trim() === "" || newUrl === DEFAULT_URL) {
+    localStorage.removeItem(STORAGE_KEY);
+  } else if (newUrl.startsWith("https://script.google.com/macros/s/")) {
+    localStorage.setItem(STORAGE_KEY, newUrl.trim());
+  } else {
+    alert("Invalid URL format!");
+    return;
+  }
+  location.reload();
+}
+
+// ============================================================
+// FETCH DATA
+// ============================================================
+async function loadData(showSpinner = true) {
+  const pill = document.getElementById("status-pill");
+  const text = document.getElementById("status-text");
+  const btn = document.getElementById("refresh-btn");
+
+  if (showSpinner) {
+    pill.classList.add("loading"); pill.classList.remove("error");
+    text.textContent = "Refreshing…";
+    btn.classList.add("spinning");
+  }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { method: "GET", redirect: "follow" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || "Unknown error");
+
+    inventory = json.items.map(enrichItem);
+    pill.classList.remove("loading", "error");
+    text.textContent = "Live · " + json.count + " items";
+    document.getElementById("updated-text").textContent =
+      "Last updated: " + new Date(json.updatedAt).toLocaleTimeString("en-IN");
+
+    buildDropdown("model-dd", "model", inventory, modelOrder);
+    buildDropdown("type-dd", "type", inventory);
+    render();
+  } catch (err) {
+    console.error(err);
+    pill.classList.remove("loading"); pill.classList.add("error");
+    text.textContent = "Error: " + err.message;
+  } finally {
+    btn.classList.remove("spinning");
+  }
+}
+
+// ============================================================
+// ENRICH ITEMS (detect model + type from name)
+// ============================================================
+const modelPatterns = [
+  // ============================================================
+  // iPhone models — har model ke saath "IPH" prefix
+  // ============================================================
+  { re: /IPH(?:ONE)?\s+16\s+PRO\s+MAX/i, m: "IPH 16 Pro Max" },
+  { re: /IPH(?:ONE)?\s+16\s+PRO/i, m: "IPH 16 Pro" },
+  { re: /IPH(?:ONE)?\s+16\s+PLUS/i, m: "IPH 16 Plus" },
+  { re: /IPH(?:ONE)?\s+16(?!\d)/i, m: "IPH 16" },
+  { re: /IPH(?:ONE)?\s+15\s+PRO\s+MAX/i, m: "IPH 15 Pro Max" },
+  { re: /IPH(?:ONE)?\s+15\s+PRO/i, m: "IPH 15 Pro" },
+  { re: /IPH(?:ONE)?\s+15\s+PLUS/i, m: "IPH 15 Plus" },
+  { re: /IPH(?:ONE)?\s+15(?!\d)/i, m: "IPH 15" },
+  { re: /IPH(?:ONE)?\s+14\s+PRO\s+MAX/i, m: "IPH 14 Pro Max" },
+  { re: /IPH(?:ONE)?\s+14\s+PRO/i, m: "IPH 14 Pro" },
+  { re: /IPH(?:ONE)?\s+14\s+PLUS/i, m: "IPH 14 Plus" },
+  { re: /IPH(?:ONE)?\s+14(?!\d)/i, m: "IPH 14" },
+  { re: /IPH(?:ONE)?\s+13\s+PRO\s+MAX/i, m: "IPH 13 Pro Max" },
+  { re: /IPH(?:ONE)?\s+13\s+PRO/i, m: "IPH 13 Pro" },
+  { re: /IPH(?:ONE)?\s+13\s+MINI/i, m: "IPH 13 Mini" },
+  { re: /IPH(?:ONE)?\s+13(?!\d)/i, m: "IPH 13" },
+  { re: /IPH(?:ONE)?\s+12\s+PRO\s+MAX/i, m: "IPH 12 Pro Max" },
+  { re: /IPH(?:ONE)?\s+12\s+PRO/i, m: "IPH 12 Pro" },
+  { re: /IPH(?:ONE)?\s+12\s+MINI/i, m: "IPH 12 Mini" },
+  { re: /IPH(?:ONE)?\s+12(?!\d)/i, m: "IPH 12" },
+  { re: /IPH(?:ONE)?\s+11\s+PRO\s+MAX/i, m: "IPH 11 Pro Max" },
+  { re: /IPH(?:ONE)?\s+11\s+PRO/i, m: "IPH 11 Pro" },
+  { re: /IPH(?:ONE)?\s+11(?!\d)/i, m: "IPH 11" },
+  { re: /IPH(?:ONE)?\s+XS\s+MAX/i, m: "IPH XS Max" },
+  { re: /IPH(?:ONE)?\s+XS/i, m: "IPH XS" },
+  { re: /IPH(?:ONE)?\s+XR/i, m: "IPH XR" },
+  { re: /IPH(?:ONE)?\s+X(?![RSE\d])/i, m: "IPH X" },
+  { re: /IPH(?:ONE)?\s+SE2022/i, m: "IPH SE 2022" },
+  { re: /IPH(?:ONE)?\s+SE2020/i, m: "IPH SE 2020" },
+  { re: /IPH(?:ONE)?\s+(?:SE|5SE)/i, m: "IPH SE / 5SE" },
+  { re: /IPH(?:ONE)?\s+(?:8P|8\s*PLUS)/i, m: "IPH 8 Plus" },
+  { re: /IPH(?:ONE)?\s+(?:8G|8(?!\d))/i, m: "IPH 8" },
+  { re: /IPH(?:ONE)?\s+7P/i, m: "IPH 7 Plus" },
+  { re: /IPH(?:ONE)?\s+7G|IPH\s+7(?!\w)/i, m: "IPH 7" },
+  { re: /IPH(?:ONE)?\s+(?:6\s*S\s*PLUS|6SP)/i, m: "IPH 6S Plus" },
+  { re: /IPH(?:ONE)?\s+(?:6\s*PLUS|6P)(?!\w)/i, m: "IPH 6 Plus" },
+  { re: /IPH(?:ONE)?\s+6S/i, m: "IPH 6S" },
+  { re: /IPH(?:ONE)?\s+(?:6G|6(?!\w))/i, m: "IPH 6" },
+  { re: /IPH(?:ONE)?\s+5SE/i, m: "IPH 5SE" },
+  { re: /IPH(?:ONE)?\s+5S/i, m: "IPH 5S" },
+  { re: /IPH(?:ONE)?\s+5G/i, m: "IPH 5" },
+  { re: /IPH(?:ONE)?\s+4S/i, m: "IPH 4S" },
+  { re: /IPH(?:ONE)?\s+4G/i, m: "IPH 4" },
+  { re: /I\s*WATCH|IWATCH|LQS1/i, m: "Apple Watch" },
+  { re: /IPAD|A1\d{3}|A2\d{3}/i, m: "iPad" },
+
+  // ============================================================
+  // VJ Multi-fit batteries (description "VJ" se start hoti hai)
+  // ============================================================
+  { re: /^VJ\s+|^MBT\s+VJ\s+|\bVJ\s+\d{6}/i, m: "VJ Multi-fit" },
+
+  // ============================================================
+  // Redmi Note series — explicit names in description
+  // ============================================================
+  { re: /REDMI\s+NOTE\s+13\s*PRO/i, m: "Redmi Note 13 Pro" },
+  { re: /REDMI\s+NOTE\s+13/i, m: "Redmi Note 13" },
+  { re: /REDMI\s+NOTE\s+12\s*PRO/i, m: "Redmi Note 12 Pro" },
+  { re: /REDMI\s+NOTE\s+12/i, m: "Redmi Note 12" },
+  { re: /REDMI\s+NOTE\s+11\s*PRO/i, m: "Redmi Note 11 Pro" },
+  { re: /REDMI\s+NOTE\s+11/i, m: "Redmi Note 11" },
+  { re: /REDMI\s+NOTE\s+10\s*PRO/i, m: "Redmi Note 10 Pro" },
+  { re: /REDMI\s+NOTE\s+10/i, m: "Redmi Note 10" },
+  { re: /REDMI\s+NOTE\s+9\s*PRO/i, m: "Redmi Note 9 Pro" },
+  { re: /REDMI\s+NOTE\s+9/i, m: "Redmi Note 9" },
+  { re: /REDMI\s+NOTE\s+8\s*PRO/i, m: "Redmi Note 8 Pro" },
+  { re: /REDMI\s+NOTE\s+8/i, m: "Redmi Note 8" },
+  { re: /REDMI\s+NOTE\s+7\s*PRO/i, m: "Redmi Note 7 Pro" },
+  { re: /REDMI\s+NOTE\s+7/i, m: "Redmi Note 7" },
+  { re: /REDMI\s+NOTE\s+6\s*PRO/i, m: "Redmi Note 6 Pro" },
+  { re: /REDMI\s+NOTE\s+6/i, m: "Redmi Note 6" },
+  { re: /REDMI\s+NOTE\s+5\s*PRO/i, m: "Redmi Note 5 Pro" },
+  { re: /REDMI\s+NOTE\s+5/i, m: "Redmi Note 5" },
+  { re: /REDMI\s+NOTE\s+4/i, m: "Redmi Note 4" },
+  { re: /REDMI\s+NOTE\s+3/i, m: "Redmi Note 3" },
+  { re: /REDMI\s+NOTE/i, m: "Redmi Note" },
+  // Redmi numeric models
+  { re: /REDMI\s+13\s*C/i, m: "Redmi 13C" },
+  { re: /REDMI\s+13/i, m: "Redmi 13" },
+  { re: /REDMI\s+12\s*C/i, m: "Redmi 12C" },
+  { re: /REDMI\s+12/i, m: "Redmi 12" },
+  { re: /REDMI\s+11/i, m: "Redmi 11" },
+  { re: /REDMI\s+10\s*A/i, m: "Redmi 10A" },
+  { re: /REDMI\s+10\s*C/i, m: "Redmi 10C" },
+  { re: /REDMI\s+10/i, m: "Redmi 10" },
+  { re: /REDMI\s+9\s*A/i, m: "Redmi 9A" },
+  { re: /REDMI\s+9\s*C/i, m: "Redmi 9C" },
+  { re: /REDMI\s+9\s*POWER/i, m: "Redmi 9 Power" },
+  { re: /REDMI\s+9/i, m: "Redmi 9" },
+  { re: /REDMI\s+8\s*A/i, m: "Redmi 8A" },
+  { re: /REDMI\s+8/i, m: "Redmi 8" },
+  { re: /REDMI\s+7\s*A/i, m: "Redmi 7A" },
+  { re: /REDMI\s+7/i, m: "Redmi 7" },
+  { re: /REDMI\s+6\s*A/i, m: "Redmi 6A" },
+  { re: /REDMI\s+6\s*PRO/i, m: "Redmi 6 Pro" },
+  { re: /REDMI\s+6/i, m: "Redmi 6" },
+  { re: /REDMI\s+5\s*A/i, m: "Redmi 5A" },
+  { re: /REDMI\s+5\s*PLUS/i, m: "Redmi 5 Plus" },
+  { re: /REDMI\s+5/i, m: "Redmi 5" },
+  { re: /REDMI\s+4\s*A/i, m: "Redmi 4A" },
+  { re: /REDMI\s+4/i, m: "Redmi 4" },
+  { re: /REDMI\s+K\d+/i, m: "Redmi K series" },
+  { re: /REDMI\s+Y\d/i, m: "Redmi Y series" },
+  { re: /REDMI\s+S\d/i, m: "Redmi S series" },
+  { re: /REDMI\s+GO/i, m: "Redmi Go" },
+  { re: /REDMI/i, m: "Redmi" },
+  // Poco / Mi
+  { re: /POCO\s+(F\d|X\d|M\d|C\d)/i, m: "Poco" },
+  { re: /POCO/i, m: "Poco" },
+  { re: /\bMI\s+(11|12|13|14)\s*LITE/i, m: "Mi Lite" },
+  { re: /\bMI\s+(11|12|13|14)\s*ULTRA/i, m: "Mi Ultra" },
+  { re: /\bMI\s+(11|12|13|14)/i, m: "Mi flagship" },
+  { re: /\bMI\s+A\d/i, m: "Mi A series" },
+  { re: /XIAOMI/i, m: "Xiaomi" },
+
+  // ============================================================
+  // Other brand explicit phone names
+  // ============================================================
+  { re: /HONOR\s+\d+/i, m: "Honor" },
+  { re: /MATE\s+\d+/i, m: "Huawei Mate" },
+  { re: /\bP\d+\s*(?:LITE|PRO)?\b/i, m: "Huawei P-series" },
+  { re: /HUAWEI/i, m: "Huawei" },
+  { re: /HONOR/i, m: "Honor" },
+  { re: /GALAXY\s+(?:NOTE\s+)?\d+/i, m: "Samsung Galaxy" },
+  { re: /SAMSUNG/i, m: "Samsung" },
+  { re: /OPPO/i, m: "Oppo" },
+  { re: /VIVO/i, m: "Vivo" },
+  { re: /ONEPLUS|ONE\s+PLUS/i, m: "OnePlus" },
+  { re: /REALME/i, m: "Realme" },
+  { re: /NOKIA/i, m: "Nokia" },
+  { re: /LYF/i, m: "Lyf" },
+  { re: /MICROMAX/i, m: "Micromax" },
+
+  // ============================================================
+  // 🔋 BATTERY CODE LOOKUP — famous phone name infer karta hai
+  // ============================================================
+  // Xiaomi / Redmi BN codes
+  { re: /\bBN30\b/i, m: "Redmi 4A" },
+  { re: /\bBN31\b/i, m: "Mi A1 / Redmi Y1 / S2" },
+  { re: /\bBN34\b/i, m: "Redmi 5A" },
+  { re: /\bBN35\b/i, m: "Redmi 5" },
+  { re: /\bBN36\b/i, m: "Mi A2 / 6X" },
+  { re: /\bBN37\b/i, m: "Redmi 6 / 6A" },
+  { re: /\bBN38\b/i, m: "Redmi Go" },
+  { re: /\bBN40\b/i, m: "Redmi 4 Prime" },
+  { re: /\bBN41\b/i, m: "Redmi Note 4 (MTK)" },
+  { re: /\bBN43\b/i, m: "Redmi Note 4 (SD)" },
+  { re: /\bBN44\b/i, m: "Redmi 5 Plus / Note 5 / Y2" },
+  { re: /\bBN45\b/i, m: "Redmi Note 5 Pro" },
+  { re: /\bBN46\b/i, m: "Redmi 7 / Note 8" },
+  { re: /\bBN47\b/i, m: "Redmi 6 Pro / Mi A2 Lite" },
+  { re: /\bBN48\b/i, m: "Redmi Note 6 Pro" },
+  { re: /\bBN49\b/i, m: "Redmi 7A" },
+  { re: /\bBN51\b/i, m: "Redmi 8 / 8A" },
+  { re: /\bBN52\b/i, m: "Redmi Note 9 Pro" },
+  { re: /\bBN53\b/i, m: "Redmi Note 9 Pro Max" },
+  { re: /\bBN54\b/i, m: "Redmi Note 9 / 10X" },
+  { re: /\bBN55\b/i, m: "Redmi Note 9S" },
+  { re: /\bBN56\b/i, m: "Redmi 9A / 9C" },
+  { re: /\bBN57\b/i, m: "Poco X3 / M2 Pro" },
+  { re: /\bBN58\b/i, m: "Redmi Note 11" },
+  { re: /\bBN59\b/i, m: "Redmi Note 10" },
+  { re: /\bBN5[ABCDGJKLMN]\b/i, m: "Redmi 10/12/13 series" },
+  { re: /\bBN6[12345]\b/i, m: "Poco / Redmi (new)" },
+  // Xiaomi BM codes (Mi flagship)
+  { re: /\bBM3[ABCDEFJKLM]\b/i, m: "Mi 8/9/Mix series" },
+  { re: /\bBM4\w?\b/i, m: "Mi flagship" },
+  // Xiaomi BP codes
+  { re: /\bBP40\b/i, m: "Redmi K20 Pro / Mi 9T Pro" },
+  { re: /\bBP41\b/i, m: "Redmi K20 / Mi 9T" },
+  { re: /\bBP42\b/i, m: "Mi 11 Lite" },
+  { re: /\bBP43\b/i, m: "Mi 11i" },
+  { re: /\bBP44\b/i, m: "Poco F3 / Mi 11X" },
+  { re: /\bBP45\b/i, m: "Mi 11" },
+  { re: /\bBP46\b/i, m: "Mi 11 Ultra" },
+  { re: /\bBP47\b/i, m: "Mi 12" },
+  { re: /\bBP48\b/i, m: "Mi 12 Pro" },
+  { re: /\bBP4\w\b/i, m: "Mi / Poco" },
+  // Huawei HB codes
+  { re: /HB366481/i, m: "Honor 8 / P10 Lite / P20 Lite" },
+  { re: /HB386280/i, m: "Honor 9 / P10" },
+  { re: /HB386483/i, m: "Honor Play / Mate 20 Lite" },
+  { re: /HB386589/i, m: "Mate 10 Lite" },
+  { re: /HB396285/i, m: "P20 / Honor 10" },
+  { re: /HB396589/i, m: "Mate 9" },
+  { re: /HB406689/i, m: "Y9 2019" },
+  { re: /HB416683/i, m: "Mate 9 Pro / P10 Plus" },
+  { re: /HB436178/i, m: "Mate 10 Pro" },
+  { re: /HB436380/i, m: "P30" },
+  { re: /HB436486/i, m: "Mate 20 / P20 Pro" },
+  { re: /HB446486/i, m: "Honor 10 Lite / P30 Lite" },
+  { re: /HB466483/i, m: "Honor 7" },
+  { re: /HB476387/i, m: "Honor 8X Max" },
+  { re: /HB476586/i, m: "Huawei P40" },
+  { re: /HB486486/i, m: "P30 Pro / Mate 20 Pro" },
+  { re: /HB\d{6}/i, m: "Huawei (HB code)" },
+  // OnePlus BLP codes
+  { re: /BLP571/i, m: "OnePlus One" },
+  { re: /BLP597/i, m: "OnePlus 2" },
+  { re: /BLP607/i, m: "OnePlus 3" },
+  { re: /BLP609/i, m: "OnePlus 3T" },
+  { re: /BLP633/i, m: "OnePlus 5" },
+  { re: /BLP637/i, m: "OnePlus 5T" },
+  { re: /BLP657/i, m: "OnePlus 6" },
+  { re: /BLP685/i, m: "OnePlus 6T / 7" },
+  { re: /BLP699/i, m: "OnePlus 7 Pro" },
+  { re: /BLP743/i, m: "OnePlus 7T" },
+  { re: /BLP745/i, m: "OnePlus 7T Pro" },
+  { re: /BLP755/i, m: "OnePlus 8" },
+  { re: /BLP761/i, m: "OnePlus 8 Pro" },
+  { re: /BLP781/i, m: "OnePlus 8T / 9R" },
+  { re: /BLP791/i, m: "OnePlus 9" },
+  { re: /BLP829/i, m: "OnePlus 9 Pro" },
+  { re: /BLP\d{3}/i, m: "OnePlus (BLP)" },
+  // Generic Mi/Xiaomi fallback
+  { re: /\bMI\b(?!\.)/i, m: "Mi" },
+];
+
+const typePatterns = [
+  { re: /POLYMER CELL/i, t: "Polymer Cell" },
+  { re: /TAB CELL BATTERY/i, t: "iPad Cell" },
+  { re: /TAB BATTERY/i, t: "iPad Battery" },
+  { re: /CELL BATTERY/i, t: "Cell Battery" },
+  { re: /\bCELL\b/i, t: "Cell" },
+  { re: /\bBATTERY\b/i, t: "Battery" },
+];
+
+function detect(text, patterns, key) {
+  for (const p of patterns) if (p.re.test(text)) return p[key];
+  return null;
+}
+
+function enrichItem(it) {
+  return {
+    code: String(it.code || "").trim(),
+    name: String(it.name || "").trim(),
+    stock: typeof it.stock === "number" ? it.stock : 0,
+    otwAir: typeof it.otwAir === "number" ? it.otwAir : null,
+    otwSea: typeof it.otwSea === "number" ? it.otwSea : null,
+    ftyStock: typeof it.ftyStock === "number" ? it.ftyStock : null,
+    model: detect(it.name, modelPatterns, "m") || "Other",
+    type: detect(it.name, typePatterns, "t") || "Other"
+  };
+}
+
+// ============================================================
+// FORMAT
+// ============================================================
+function fmt(n) {
+  if (n === null || n === undefined) return "—";
+  const sign = n < 0 ? "−" : "";
+  return sign + Math.abs(n).toLocaleString("en-IN");
+}
+
+// ============================================================
+// FILTERS, SORTING, RENDER
+// ============================================================
+const modelOrder = [
+  // iPhone (newest first)
+  "IPH 16 Pro Max","IPH 16 Pro","IPH 16 Plus","IPH 16",
+  "IPH 15 Pro Max","IPH 15 Pro","IPH 15 Plus","IPH 15",
+  "IPH 14 Pro Max","IPH 14 Pro","IPH 14 Plus","IPH 14",
+  "IPH 13 Pro Max","IPH 13 Pro","IPH 13 Mini","IPH 13",
+  "IPH 12 Pro Max","IPH 12 Pro","IPH 12 Mini","IPH 12",
+  "IPH 11 Pro Max","IPH 11 Pro","IPH 11",
+  "IPH XS Max","IPH XS","IPH XR","IPH X",
+  "IPH SE 2022","IPH SE 2020","IPH SE / 5SE",
+  "IPH 8 Plus","IPH 8","IPH 7 Plus","IPH 7",
+  "IPH 6S Plus","IPH 6 Plus","IPH 6S","IPH 6",
+  "IPH 5SE","IPH 5S","IPH 5","IPH 4S","IPH 4",
+  "Apple Watch","iPad",
+
+  // VJ Multi-fit
+  "VJ Multi-fit",
+
+  // Redmi Note series (newest first)
+  "Redmi Note 13 Pro","Redmi Note 13","Redmi Note 12 Pro","Redmi Note 12",
+  "Redmi Note 11 Pro","Redmi Note 11","Redmi Note 10 Pro","Redmi Note 10",
+  "Redmi Note 9 Pro","Redmi Note 9","Redmi Note 8 Pro","Redmi Note 8",
+  "Redmi Note 7 Pro","Redmi Note 7","Redmi Note 6 Pro","Redmi Note 6",
+  "Redmi Note 5 Pro","Redmi Note 5","Redmi Note 4","Redmi Note 3","Redmi Note",
+  // Redmi numbered
+  "Redmi 13C","Redmi 13","Redmi 12C","Redmi 12","Redmi 11",
+  "Redmi 10A","Redmi 10C","Redmi 10",
+  "Redmi 9A","Redmi 9C","Redmi 9 Power","Redmi 9",
+  "Redmi 8A","Redmi 8","Redmi 7A","Redmi 7",
+  "Redmi 6A","Redmi 6 Pro","Redmi 6","Redmi 5A","Redmi 5 Plus","Redmi 5",
+  "Redmi 4A","Redmi 4",
+  "Redmi K series","Redmi Y series","Redmi S series","Redmi Go","Redmi",
+
+  // Battery code inferred (Xiaomi)
+  "Redmi 5 Plus / Note 5 / Y2","Redmi 7 / Note 8","Redmi 6 Pro / Mi A2 Lite",
+  "Mi A1 / Redmi Y1 / S2","Mi A2 / 6X","Redmi Note 4 (MTK)","Redmi Note 4 (SD)",
+  "Redmi K20 Pro / Mi 9T Pro","Redmi K20 / Mi 9T",
+  "Redmi 10/12/13 series","Poco / Redmi (new)","Mi 8/9/Mix series",
+
+  // Mi / Poco
+  "Poco","Mi 11 Lite","Mi Lite","Mi Ultra","Mi flagship","Mi A series","Mi","Xiaomi",
+
+  // Huawei battery codes
+  "Mate 20 / P20 Pro","Honor 10 Lite / P30 Lite","Mate 9","Mate 9 Pro / P10 Plus",
+  "Mate 10 Pro","Mate 10 Lite","Honor 8 / P10 Lite / P20 Lite","Honor 9 / P10",
+  "Honor Play / Mate 20 Lite","P20 / Honor 10","P30","P30 Pro / Mate 20 Pro",
+  "Huawei P40","Honor 7","Honor 8X Max","Y9 2019",
+  "Huawei Mate","Huawei P-series","Huawei (HB code)","Huawei","Honor",
+
+  // OnePlus
+  "OnePlus 9 Pro","OnePlus 9","OnePlus 8T / 9R","OnePlus 8 Pro","OnePlus 8",
+  "OnePlus 7T Pro","OnePlus 7T","OnePlus 7 Pro","OnePlus 6T / 7","OnePlus 6",
+  "OnePlus 5T","OnePlus 5","OnePlus 3T","OnePlus 3","OnePlus 2","OnePlus One",
+  "OnePlus (BLP)","OnePlus",
+
+  // Other brands
+  "Samsung Galaxy","Samsung","Oppo","Vivo","Realme","Nokia","Lyf","Micromax",
+
+  "Other"
+];
+
+function buildDropdown(selectId, valueKey, items, orderedList) {
+  const counts = {};
+  items.forEach(i => { counts[i[valueKey]] = (counts[i[valueKey]] || 0) + 1; });
+  const values = orderedList ? orderedList.filter(v => counts[v]) : Object.keys(counts).sort((a,b) => counts[b] - counts[a]);
+  const sel = document.getElementById(selectId);
+  const currentValue = sel.value;
+  const firstOpt = sel.querySelector("option");
+  sel.innerHTML = firstOpt.outerHTML + values.map(v =>
+    `<option value="${v}">${v}  (${counts[v]})</option>`
+  ).join("");
+  // Preserve selection across refresh
+  if (currentValue && values.includes(currentValue)) sel.value = currentValue;
+}
+
+let fModel = null, fType = null, search = "";
+let sortKey = "stock", sortDir = "desc";
+
+function applyFilters() {
+  let list = inventory.slice();
+  if (fModel) list = list.filter(i => i.model === fModel);
+  if (fType) list = list.filter(i => i.type === fType);
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(i =>
+      i.name.toLowerCase().includes(q) ||
+      i.code.toLowerCase().includes(q) ||
+      i.model.toLowerCase().includes(q)
+    );
+  }
+  const dir = sortDir === "asc" ? 1 : -1;
+  list.sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (sortKey === "model") {
+      av = modelOrder.indexOf(av); bv = modelOrder.indexOf(bv);
+    }
+    if (av === null || av === undefined) av = sortDir === "asc" ? Infinity : -Infinity;
+    if (bv === null || bv === undefined) bv = sortDir === "asc" ? Infinity : -Infinity;
+    if (typeof av === "string") return av.localeCompare(bv) * dir;
+    return (av - bv) * dir;
+  });
+  return list;
+}
+
+function render() {
+  const list = applyFilters();
+  document.getElementById("result-count").textContent = list.length.toLocaleString("en-IN");
+
+  document.querySelectorAll("thead th[data-sort]").forEach(th => {
+    const isSorted = th.dataset.sort === sortKey;
+    th.classList.toggle("sorted", isSorted);
+    const arrow = th.querySelector(".sort-arrow");
+    if (arrow) arrow.textContent = isSorted ? (sortDir === "asc" ? "↑" : "↓") : "↕";
+  });
+
+  const tbody = document.getElementById("tbody");
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7"><h3>Kuch nahi mila</h3><p>Filter ya search badlo</p></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(it => {
+    let rowCls = "";
+    let stockCls = "num";
+    if (it.stock < 0) { rowCls = "row-neg"; stockCls = "num stock-neg"; }
+    else if (it.stock === 0) { stockCls = "num stock-zero"; }
+    else if (it.stock < 30) { rowCls = "row-low"; stockCls = "num stock-low"; }
+
+    const air = it.otwAir === null ? '<span class="empty-val">—</span>' : fmt(it.otwAir);
+    const sea = it.otwSea === null ? '<span class="empty-val">—</span>' : fmt(it.otwSea);
+    const fty = it.ftyStock === null ? '<span class="empty-val">—</span>' : fmt(it.ftyStock);
+
+    return `
+      <tr class="${rowCls}">
+        <td class="model">${it.model}</td>
+        <td class="name">${it.name}</td>
+        <td class="type">${it.type}</td>
+        <td class="${stockCls}">${fmt(it.stock)}</td>
+        <td class="num">${air}</td>
+        <td class="num">${sea}</td>
+        <td class="num">${fty}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("search").addEventListener("input", e => { search = e.target.value; render(); });
+  document.querySelectorAll("thead th[data-sort]").forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (sortKey === key) sortDir = sortDir === "asc" ? "desc" : "asc";
+      else { sortKey = key; sortDir = th.classList.contains("num") ? "desc" : "asc"; }
+      render();
+    });
+  });
+  document.getElementById("model-dd").addEventListener("change", e => {
+    fModel = e.target.value || null;
+    e.target.classList.toggle("has-value", !!fModel);
+    render();
+  });
+  document.getElementById("type-dd").addEventListener("change", e => {
+    fType = e.target.value || null;
+    e.target.classList.toggle("has-value", !!fType);
+    render();
+  });
+  document.getElementById("clear-filters").addEventListener("click", () => {
+    fModel = null; fType = null; search = "";
+    document.getElementById("search").value = "";
+    const m = document.getElementById("model-dd"), t = document.getElementById("type-dd");
+    m.value = ""; m.classList.remove("has-value");
+    t.value = ""; t.classList.remove("has-value");
+    render();
+  });
+  init();
+});
+</script>
+
+</body>
+</html>
