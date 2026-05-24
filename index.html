@@ -9,42 +9,89 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #fafaf7;
+    --bg: #eef6ef;
     --surface: #ffffff;
-    --border: #ececea;
-    --border-strong: #d8d8d4;
-    --text: #1a1a1a;
-    --text-2: #6b6b6b;
-    --text-3: #9a9a9a;
-    --green: #10b981;
-    --green-soft: #ecfdf5;
-    --green-text: #047857;
+    --border: #d8e8d8;
+    --border-strong: #b8d2b8;
+    --text: #0c2515;
+    --text-2: #4d6052;
+    --text-3: #88a08e;
+    --green: #1b8a3e;
+    --green-soft: #e0f1e4;
+    --green-text: #0e6128;
+    --green-dark: #0a4a1d;
+    --green-accent: #2da55a;
     --amber: #f59e0b;
     --amber-soft: #fffbeb;
     --amber-text: #b45309;
-    --red: #ef4444;
-    --red-soft: #fef2f2;
-    --red-text: #b91c1c;
-    --blue: #3b82f6;
-    --blue-soft: #eff6ff;
-    --blue-text: #1d4ed8;
-    --purple: #8b5cf6;
-    --purple-soft: #f5f3ff;
-    --purple-text: #6d28d9;
+    --red: #d12d2d;
+    --red-soft: #fdecec;
+    --red-text: #a01818;
+    --blue: #1b8a3e;
+    --blue-soft: #e0f1e4;
+    --blue-text: #0e6128;
+    --purple: #1b8a3e;
+    --purple-soft: #e0f1e4;
+    --purple-text: #0e6128;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    background: var(--bg); color: var(--text);
+    background:
+      radial-gradient(ellipse at top left, rgba(45,165,90,0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(27,138,62,0.06), transparent 50%),
+      var(--bg);
+    color: var(--text);
     font-family: 'Manrope', -apple-system, sans-serif;
     font-size: 14px; -webkit-font-smoothing: antialiased; min-height: 100vh;
   }
   .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: "tnum"; }
 
-  header { border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 50; }
+  header { border-bottom: 1px solid var(--border); background: var(--surface); }
+  .brand-bar {
+    background:
+      radial-gradient(circle at 20% 50%, rgba(45,165,90,0.15), transparent 60%),
+      radial-gradient(circle at 80% 50%, rgba(45,165,90,0.15), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #f1f8f3 100%);
+    border-bottom: 3px solid var(--green);
+    padding: 28px 48px;
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    position: relative;
+    box-shadow: 0 4px 24px -8px rgba(27,138,62,0.15);
+  }
+  .brand-logo {
+    height: 110px; width: auto; max-width: 340px; object-fit: contain;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .brand-logo:hover { transform: scale(1.04); }
+  .brand-tagline {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; color: var(--green-dark); font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    background: var(--surface); padding: 8px 22px;
+    border: 1.5px solid var(--green-accent); border-radius: 999px;
+    white-space: nowrap; text-align: center;
+    box-shadow: 0 4px 14px rgba(27,138,62,0.12);
+    position: relative;
+  }
+  .brand-tagline::before {
+    content: "🌿"; margin-right: 6px;
+  }
+  @media (max-width: 900px) {
+    .brand-bar { padding: 18px 24px; gap: 14px; }
+    .brand-logo { height: 70px; max-width: 200px; }
+    .brand-tagline { font-size: 11px; padding: 6px 14px; letter-spacing: 0.1em; }
+  }
+  @media (max-width: 600px) {
+    .brand-bar { padding: 14px 16px; flex-direction: column; gap: 12px; }
+    .brand-logo { height: 60px; max-width: 180px; }
+    .brand-tagline { font-size: 10px; }
+  }
   .header-inner { max-width: 1400px; margin: 0 auto; padding: 22px 32px; }
   .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 18px; }
-  h1 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 28px; letter-spacing: -0.02em; line-height: 1.1; }
-  h1 em { font-style: italic; color: var(--text-2); font-weight: 400; }
+  h1 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 28px; letter-spacing: -0.02em; line-height: 1.1; color: var(--green-dark); }
+  h1 em { font-style: italic; color: var(--green-accent); font-weight: 400; }
   .subtitle { color: var(--text-2); font-size: 12px; margin-top: 5px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
   .live-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--green-soft); color: var(--green-text); padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
   .live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
@@ -103,18 +150,29 @@
   .clear-btn { background: none; border: none; color: var(--blue-text); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Manrope'; }
   .clear-btn:hover { text-decoration: underline; }
 
-  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: visible;
+    box-shadow: 0 1px 0 0 rgba(27,138,62,0.04), 0 8px 24px -8px rgba(27,138,62,0.08);
+  }
   .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 13px; }
-  thead { position: sticky; top: 0; z-index: 5; }
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
   thead th {
     text-align: left; font-size: 10px; font-weight: 700;
-    color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 12px 14px; background: #fafaf7;
-    border-bottom: 1px solid var(--border); white-space: nowrap;
+    color: var(--green-dark); letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 14px 14px; background: linear-gradient(180deg, #f0f8f1 0%, #e6f1e8 100%);
+    border-bottom: 1px solid var(--green-accent); white-space: nowrap;
     cursor: pointer; user-select: none;
+    box-shadow: 0 1px 0 0 var(--green-accent);
   }
-  thead th:hover { background: #f3f3ee; color: var(--text); }
+  thead th:hover { background: #dceadf; color: var(--green-dark); }
   thead th.num { text-align: right; }
   thead th .sort-arrow { color: var(--text-3); font-size: 9px; margin-left: 4px; }
   thead th.sorted .sort-arrow { color: var(--text); }
@@ -170,6 +228,324 @@
     tbody td { padding: 9px 10px; }
     thead th { padding: 10px; }
   }
+
+  /* ============================================================
+     TABS (Inventory / Orders)
+     ============================================================ */
+  .tabs {
+    display: flex; gap: 4px; padding: 0 32px;
+    border-bottom: 1px solid var(--border); background: var(--surface);
+    max-width: 1400px; margin: 0 auto;
+  }
+  .tab-btn {
+    background: none; border: none; padding: 14px 18px;
+    font-family: 'Manrope'; font-size: 13px; font-weight: 700;
+    color: var(--text-3); cursor: pointer; border-bottom: 3px solid transparent;
+    transition: all 0.15s; margin-bottom: -1px;
+    display: inline-flex; align-items: center; gap: 8px;
+    letter-spacing: 0.02em;
+  }
+  .tab-btn:hover { color: var(--green-dark); }
+  .tab-btn.active { color: var(--green-dark); border-bottom-color: var(--green); }
+  .tab-badge {
+    background: var(--green); color: white; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 999px; min-width: 18px; text-align: center;
+  }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ============================================================
+     ADD-TO-CART buttons on inventory rows
+     ============================================================ */
+  tbody tr { cursor: pointer; }
+  .add-btn {
+    background: var(--green); color: white; border: none;
+    padding: 5px 10px; border-radius: 6px;
+    font-family: 'Manrope'; font-size: 11px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+  }
+  .add-btn:hover { background: var(--green-dark); }
+  td.action-cell { text-align: right; width: 70px; }
+
+  /* ============================================================
+     CART FLOATING BUTTON
+     ============================================================ */
+  .cart-fab {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #2563eb; color: white; border: none;
+    width: 60px; height: 60px; border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+    cursor: pointer; font-size: 24px; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .cart-fab:hover { transform: scale(1.08); background: #1d4ed8; }
+  .cart-badge-fab {
+    position: absolute; top: -4px; right: -4px;
+    background: var(--red); color: white;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 7px; border-radius: 999px;
+    min-width: 22px; text-align: center;
+    border: 2px solid var(--bg);
+  }
+  .cart-fab.empty .cart-badge-fab { display: none; }
+
+  /* ============================================================
+     CART PANEL (slide-in from right)
+     ============================================================ */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 200; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: auto; }
+  .cart-panel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(420px, 92vw); background: var(--bg);
+    z-index: 201; transform: translateX(100%);
+    transition: transform 0.25s ease;
+    display: flex; flex-direction: column;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.1);
+  }
+  .cart-panel.open { transform: translateX(0); }
+  .cart-header {
+    padding: 20px 24px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--surface);
+  }
+  .cart-header h2 {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-weight: 500; font-size: 24px;
+  }
+  .cart-close {
+    background: none; border: none; cursor: pointer;
+    font-size: 24px; color: var(--text-2); width: 32px; height: 32px;
+    border-radius: 50%;
+  }
+  .cart-close:hover { background: var(--border); color: var(--text); }
+  .cart-body {
+    flex: 1; overflow-y: auto; padding: 16px 24px;
+  }
+  .cart-empty {
+    text-align: center; padding: 80px 20px; color: var(--text-3);
+  }
+  .cart-empty .icon { font-size: 64px; margin-bottom: 12px; opacity: 0.4; }
+  .cart-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; margin-bottom: 10px;
+  }
+  .cart-item-name {
+    font-size: 12px; color: var(--text); font-weight: 500;
+    line-height: 1.35; margin-bottom: 4px;
+  }
+  .cart-item-model {
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    color: var(--blue-text); font-weight: 700; margin-bottom: 10px;
+  }
+  .cart-item-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .qty-control {
+    display: inline-flex; align-items: center; gap: 0;
+    border: 1px solid var(--border-strong); border-radius: 7px;
+    overflow: hidden;
+  }
+  .qty-btn {
+    background: var(--surface); border: none; cursor: pointer;
+    width: 28px; height: 28px; font-size: 14px; font-weight: 700;
+    color: var(--text-2);
+  }
+  .qty-btn:hover { background: var(--border); color: var(--text); }
+  .qty-input {
+    width: 50px; border: none; text-align: center;
+    font-family: 'JetBrains Mono'; font-size: 13px; font-weight: 600;
+    background: var(--surface); padding: 4px 0; outline: none;
+  }
+  .cart-remove {
+    background: none; border: none; cursor: pointer;
+    color: var(--red); font-size: 18px; padding: 4px 8px; border-radius: 6px;
+  }
+  .cart-remove:hover { background: var(--red-soft); }
+  .cart-footer {
+    padding: 20px 24px; border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .cart-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; font-size: 13px; color: var(--text-2);
+  }
+  .cart-summary b {
+    color: var(--text); font-family: 'JetBrains Mono'; font-size: 16px;
+  }
+  .submit-btn {
+    width: 100%; background: var(--green); color: #fff;
+    border: none; padding: 14px; border-radius: 10px;
+    font-family: 'Manrope'; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .submit-btn:hover { background: var(--green-dark); }
+  .submit-btn:disabled { background: var(--text-3); cursor: not-allowed; }
+
+  /* ============================================================
+     ADD-TO-CART MODAL
+     ============================================================ */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 300; display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--surface); border-radius: 14px;
+    padding: 28px; max-width: 460px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .modal-box h3 {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 22px; margin-bottom: 6px; line-height: 1.3;
+  }
+  .modal-meta {
+    display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 20px;
+    font-size: 12px; color: var(--text-2);
+  }
+  .modal-meta span b { color: var(--text); font-family: 'JetBrains Mono'; }
+  .modal-row { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; }
+  .modal-row label { font-size: 12px; font-weight: 700; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; min-width: 60px; }
+  .modal-row input {
+    flex: 1; padding: 10px 14px; border: 1px solid var(--border-strong);
+    border-radius: 8px; font-family: 'JetBrains Mono'; font-size: 14px;
+    outline: none;
+  }
+  .modal-row input:focus { border-color: var(--text); }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-actions button { flex: 1; padding: 11px; border-radius: 8px; font-family: 'Manrope'; font-weight: 600; font-size: 13px; cursor: pointer; border: 1px solid var(--border-strong); background: var(--surface); }
+  .modal-actions .primary { background: var(--green); color: white; border-color: var(--green); }
+  .modal-actions .primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+  .modal-actions .secondary:hover { background: var(--border); }
+
+  /* ============================================================
+     ORDERS VIEW - status badges, status select
+     ============================================================ */
+  .status-select {
+    padding: 5px 8px; border-radius: 6px; font-family: 'Manrope';
+    font-size: 11px; font-weight: 700; border: 1px solid transparent;
+    cursor: pointer; outline: none;
+  }
+  .status-Pending   { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+  .status-Process   { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+  .status-Hold      { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+  .status-Cancelled { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+  .status-Completed { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+
+  .order-date {
+    font-family: 'JetBrains Mono'; font-size: 11px; color: var(--text-2);
+    white-space: nowrap;
+  }
+  .order-id {
+    font-family: 'JetBrains Mono'; font-size: 10px; color: var(--text-3);
+    white-space: nowrap;
+  }
+  .delete-order-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--red); padding: 4px 8px; border-radius: 6px; font-size: 14px;
+  }
+  .delete-order-btn:hover { background: var(--red-soft); }
+
+  /* Orders toolbar - date filter + summary stats */
+  .orders-toolbar {
+    display: flex; gap: 16px; align-items: flex-end;
+    justify-content: space-between; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;
+    box-shadow: 0 1px 0 0 rgba(27,138,62,0.04);
+  }
+  .orders-date-filter { min-width: 260px; flex: 1; }
+  .orders-summary { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .orders-stat { display: flex; flex-direction: column; align-items: flex-start; }
+  .orders-stat small {
+    font-size: 9px; font-weight: 700; color: var(--text-3);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .orders-stat b {
+    font-family: 'JetBrains Mono'; font-size: 20px; font-weight: 700;
+    color: var(--green-dark);
+  }
+  @media (max-width: 720px) {
+    .orders-toolbar { padding: 12px; }
+    .orders-summary { gap: 14px; width: 100%; }
+    .orders-stat b { font-size: 16px; }
+  }
+
+  /* Expand/Collapse arrow for orders */
+  .expand-btn {
+    background: none; border: 1px solid var(--border-strong);
+    border-radius: 6px; width: 26px; height: 26px;
+    cursor: pointer; color: var(--text-2); font-size: 11px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+  }
+  .expand-btn:hover { background: var(--green-soft); border-color: var(--green-accent); color: var(--green-dark); }
+  .expand-btn.expanded { transform: rotate(90deg); background: var(--green-soft); border-color: var(--green-accent); color: var(--green-dark); }
+
+  tr.order-summary { cursor: pointer; }
+  tr.order-summary:hover { background: var(--green-soft) !important; }
+  tr.order-summary td { font-size: 13px; }
+  .order-item-count {
+    display: inline-block; background: var(--green-soft); color: var(--green-dark);
+    padding: 3px 10px; border-radius: 999px; font-weight: 700;
+    font-family: 'JetBrains Mono'; font-size: 12px;
+  }
+
+  /* Nested items table inside expanded order */
+  tr.order-details { background: #f8fcf9; }
+  tr.order-details > td {
+    padding: 0 !important;
+    border-bottom: 1px solid var(--border);
+  }
+  .items-inner {
+    padding: 12px 18px 16px 56px; background: #f8fcf9;
+  }
+  .items-inner-title {
+    font-size: 10px; font-weight: 700; color: var(--green-dark);
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  table.items-table {
+    width: 100%; border-collapse: collapse; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  table.items-table th {
+    text-align: left; padding: 9px 12px; font-size: 10px;
+    color: var(--text-3); font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; background: #f0f8f1;
+    border-bottom: 1px solid var(--border);
+  }
+  table.items-table th.num { text-align: right; }
+  table.items-table td {
+    padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 12px;
+  }
+  table.items-table tr:last-child td { border-bottom: none; }
+  table.items-table td.model {
+    font-family: 'JetBrains Mono'; font-weight: 700;
+    color: var(--green-dark); white-space: nowrap;
+  }
+  table.items-table td.num {
+    text-align: right; font-family: 'JetBrains Mono'; font-weight: 600;
+  }
+
+  /* Toast notifications */
+  .toast {
+    position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: var(--bg);
+    padding: 12px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 1000; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
 </style>
 </head>
 <body>
@@ -177,6 +553,11 @@
 <!-- DASHBOARD -->
 <div id="dashboard" style="display:none">
 <header>
+  <div class="brand-bar">
+    <img class="brand-logo" id="logo-mobatree" alt="Mobatree" />
+    <div class="brand-tagline">Live Stock Dashboard</div>
+    <img class="brand-logo" id="logo-cashify" alt="Cashify" />
+  </div>
   <div class="header-inner">
     <div class="header-top">
       <div>
@@ -193,16 +574,27 @@
         <button class="refresh-btn" onclick="changeUrl()" title="Change URL">⚙</button>
       </div>
     </div>
+  </div>
+</header>
 
+<!-- TABS: Inventory / Orders -->
+<div class="tabs">
+  <button class="tab-btn active" data-view="inventory" onclick="switchView('inventory')">📦 Inventory</button>
+  <button class="tab-btn" data-view="orders" onclick="switchView('orders')">🧾 Orders <span class="tab-badge" id="orders-tab-badge" style="display:none">0</span></button>
+</div>
+
+<main>
+  <!-- INVENTORY VIEW -->
+  <div id="view-inventory" class="view active">
     <div class="search-row">
       <div class="search">
-        <input type="text" id="search" placeholder="Search… (e.g. 14 Pro, polymer, 18127)" />
+        <input type="text" id="search" placeholder="Search… (e.g. 14 Pro, polymer, BN45, Redmi)" />
       </div>
     </div>
 
-    <div class="filter-dropdowns">
+    <div class="filter-dropdowns" style="margin-bottom: 18px;">
       <div class="dd-group">
-        <label>iPhone Model</label>
+        <label>Model</label>
         <select id="model-dd" class="filter-dd">
           <option value="">All Models</option>
         </select>
@@ -214,34 +606,112 @@
         </select>
       </div>
     </div>
-  </div>
-</header>
 
-<main>
-  <div class="result-info">
-    <span>Showing <b id="result-count">0</b> items · Auto-refresh every 30s</span>
-    <button class="clear-btn" id="clear-filters">Clear all filters</button>
+    <div class="result-info">
+      <span>Showing <b id="result-count">0</b> items · Auto-refresh every 30s</span>
+      <button class="clear-btn" id="clear-filters">Clear all filters</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="model">Model <span class="sort-arrow">↕</span></th>
+              <th data-sort="name">Description <span class="sort-arrow">↕</span></th>
+              <th data-sort="type">Type <span class="sort-arrow">↕</span></th>
+              <th class="num sorted" data-sort="stock">📦 Stock <span class="sort-arrow">↓</span></th>
+              <th class="num" data-sort="otw">🚚 OTW <span class="sort-arrow">↕</span></th>
+              <th class="action-cell">Add</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
-  <div class="table-wrap">
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th data-sort="model">Model <span class="sort-arrow">↕</span></th>
-            <th data-sort="name">Description <span class="sort-arrow">↕</span></th>
-            <th data-sort="type">Type <span class="sort-arrow">↕</span></th>
-            <th class="num sorted" data-sort="stock">📦 Stock <span class="sort-arrow">↓</span></th>
-            <th class="num" data-sort="otwAir">✈ OTW Air <span class="sort-arrow">↕</span></th>
-            <th class="num" data-sort="otwSea">🚢 OTW Sea <span class="sort-arrow">↕</span></th>
-            <th class="num" data-sort="ftyStock">🏭 Fty <span class="sort-arrow">↕</span></th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
+
+  <!-- ORDERS VIEW -->
+  <div id="view-orders" class="view">
+    <div class="orders-toolbar">
+      <div class="dd-group orders-date-filter">
+        <label>📅 Filter by Date</label>
+        <select id="order-date-filter" class="filter-dd" onchange="renderOrders()">
+          <option value="all">All Dates</option>
+        </select>
+      </div>
+      <div class="orders-summary">
+        <div class="orders-stat"><small>Orders</small><b id="orders-count">0</b></div>
+        <div class="orders-stat"><small>Total Items</small><b id="orders-items-count">0</b></div>
+        <div class="orders-stat"><small>Total Qty</small><b id="orders-qty-count">0</b></div>
+        <button class="refresh-btn" onclick="loadOrders(true)"><span class="refresh-icon">↻</span> Refresh</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px"></th>
+              <th>Date · Order ID</th>
+              <th class="num">Items</th>
+              <th class="num">Total Qty</th>
+              <th>Status</th>
+              <th class="action-cell">Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </main>
 </div>
+
+<!-- CART FLOATING BUTTON -->
+<button class="cart-fab empty" id="cart-fab" onclick="toggleCart()">
+  🛒
+  <span class="cart-badge-fab" id="cart-count-badge">0</span>
+</button>
+
+<!-- CART PANEL -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<aside class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2>Cart</h2>
+    <button class="cart-close" onclick="toggleCart()">×</button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-summary">
+      <span>Total items</span>
+      <b id="cart-total-qty">0</b>
+    </div>
+    <button class="submit-btn" id="submit-btn" onclick="submitOrder()" disabled>Submit Order</button>
+  </div>
+</aside>
+
+<!-- ADD-TO-CART MODAL -->
+<div class="modal-overlay" id="add-modal" onclick="closeAddModal(event)">
+  <div class="modal-box">
+    <h3 id="modal-item-name">—</h3>
+    <div class="modal-meta">
+      <span>Model: <b id="modal-item-model">—</b></span>
+      <span>Stock: <b id="modal-item-stock">—</b></span>
+      <span>OTW: <b id="modal-item-otw">—</b></span>
+    </div>
+    <div class="modal-row">
+      <label>Qty</label>
+      <input type="number" id="modal-qty" min="1" value="1" />
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeAddModal()">Cancel</button>
+      <button class="primary" onclick="confirmAddToCart()">Add to Cart</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
@@ -254,6 +724,11 @@ let APPS_SCRIPT_URL = "";
 let inventory = [];
 let refreshTimer = null;
 
+  // Inject brand logos (base64 embedded)
+  const LOGO_MOBATREE = "data:image/jpeg;base64,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";
+  const LOGO_CASHIFY = "data:image/jpeg;base64,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";
+
+
 // ============================================================
 // SETUP / URL MANAGEMENT
 // ============================================================
@@ -261,7 +736,15 @@ function init() {
   // Use stored URL if user has overridden, else use default
   APPS_SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || DEFAULT_URL;
   document.getElementById("dashboard").style.display = "block";
+  document.getElementById("logo-mobatree").src = LOGO_MOBATREE;
+  document.getElementById("logo-cashify").src = LOGO_CASHIFY;
+
+  // Restore cart from previous session
+  loadCartFromStorage();
+  renderCart();
+
   loadData();
+  loadOrders(false);  // fetch orders in background so badge shows
   refreshTimer = setInterval(() => loadData(false), REFRESH_INTERVAL);
 }
 
@@ -568,12 +1051,9 @@ function detect(text, patterns, key) {
 
 function enrichItem(it) {
   return {
-    code: String(it.code || "").trim(),
     name: String(it.name || "").trim(),
     stock: typeof it.stock === "number" ? it.stock : 0,
-    otwAir: typeof it.otwAir === "number" ? it.otwAir : null,
-    otwSea: typeof it.otwSea === "number" ? it.otwSea : null,
-    ftyStock: typeof it.ftyStock === "number" ? it.ftyStock : null,
+    otw: typeof it.otw === "number" ? it.otw : null,
     model: detect(it.name, modelPatterns, "m") || "Other",
     type: detect(it.name, typePatterns, "t") || "Other"
   };
@@ -677,8 +1157,8 @@ function applyFilters() {
     const q = search.toLowerCase();
     list = list.filter(i =>
       i.name.toLowerCase().includes(q) ||
-      i.code.toLowerCase().includes(q) ||
-      i.model.toLowerCase().includes(q)
+      i.model.toLowerCase().includes(q) ||
+      i.type.toLowerCase().includes(q)
     );
   }
   const dir = sortDir === "asc" ? 1 : -1;
@@ -708,33 +1188,511 @@ function render() {
 
   const tbody = document.getElementById("tbody");
   if (list.length === 0) {
-    tbody.innerHTML = `<tr class="empty-row"><td colspan="7"><h3>Kuch nahi mila</h3><p>Filter ya search badlo</p></td></tr>`;
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="6"><h3>Kuch nahi mila</h3><p>Filter ya search badlo</p></td></tr>`;
     return;
   }
 
-  tbody.innerHTML = list.map(it => {
+  tbody.innerHTML = list.map((it, idx) => {
     let rowCls = "";
     let stockCls = "num";
     if (it.stock < 0) { rowCls = "row-neg"; stockCls = "num stock-neg"; }
     else if (it.stock === 0) { stockCls = "num stock-zero"; }
     else if (it.stock < 30) { rowCls = "row-low"; stockCls = "num stock-low"; }
 
-    const air = it.otwAir === null ? '<span class="empty-val">—</span>' : fmt(it.otwAir);
-    const sea = it.otwSea === null ? '<span class="empty-val">—</span>' : fmt(it.otwSea);
-    const fty = it.ftyStock === null ? '<span class="empty-val">—</span>' : fmt(it.ftyStock);
+    const otw = it.otw === null ? '<span class="empty-val">—</span>' : fmt(it.otw);
 
     return `
-      <tr class="${rowCls}">
+      <tr class="${rowCls}" onclick="openAddModal(${idx})">
         <td class="model">${it.model}</td>
         <td class="name">${it.name}</td>
         <td class="type">${it.type}</td>
         <td class="${stockCls}">${fmt(it.stock)}</td>
-        <td class="num">${air}</td>
-        <td class="num">${sea}</td>
-        <td class="num">${fty}</td>
+        <td class="num">${otw}</td>
+        <td class="action-cell"><button class="add-btn" onclick="event.stopPropagation(); openAddModal(${idx})">+ Add</button></td>
       </tr>
     `;
   }).join("");
+
+  // Store filtered list for modal reference
+  currentList = list;
+}
+
+// Store currently-rendered list (so we can index from row clicks)
+let currentList = [];
+
+// ============================================================
+// CART STATE & PERSISTENCE
+// ============================================================
+let cart = [];
+let selectedItem = null;
+let orders = [];
+
+function loadCartFromStorage() {
+  try { cart = JSON.parse(localStorage.getItem("ims_cart") || "[]"); } catch (_) { cart = []; }
+}
+function saveCartToStorage() {
+  localStorage.setItem("ims_cart", JSON.stringify(cart));
+}
+
+// ============================================================
+// MODAL — Add to cart
+// ============================================================
+function openAddModal(idx) {
+  const it = currentList[idx];
+  if (!it) return;
+  selectedItem = it;
+  document.getElementById("modal-item-name").textContent = it.name;
+  document.getElementById("modal-item-model").textContent = it.model;
+  document.getElementById("modal-item-stock").textContent = fmt(it.stock);
+  document.getElementById("modal-item-otw").textContent = it.otw === null ? "—" : fmt(it.otw);
+  document.getElementById("modal-qty").value = 1;
+  document.getElementById("add-modal").classList.add("open");
+  setTimeout(() => document.getElementById("modal-qty").focus(), 50);
+}
+
+function closeAddModal(e) {
+  if (e && e.target.id !== "add-modal") return;
+  document.getElementById("add-modal").classList.remove("open");
+  selectedItem = null;
+}
+
+function confirmAddToCart() {
+  if (!selectedItem) return;
+  const qty = parseInt(document.getElementById("modal-qty").value, 10);
+  if (!qty || qty < 1) { toast("Qty 1 ya zyada honi chahiye", "error"); return; }
+
+  // Merge if same item already in cart
+  const existing = cart.find(c => c.name === selectedItem.name);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({
+      name: selectedItem.name,
+      model: selectedItem.model,
+      qty: qty
+    });
+  }
+  saveCartToStorage();
+  renderCart();
+  toast(`Added: ${selectedItem.model} × ${qty}`, "success");
+  document.getElementById("add-modal").classList.remove("open");
+  selectedItem = null;
+}
+
+// ============================================================
+// CART PANEL
+// ============================================================
+function toggleCart() {
+  const panel = document.getElementById("cart-panel");
+  const overlay = document.getElementById("cart-overlay");
+  panel.classList.toggle("open");
+  overlay.classList.toggle("open");
+}
+
+function renderCart() {
+  const totalQty = cart.reduce((sum, c) => sum + c.qty, 0);
+
+  // Update FAB badge
+  const fab = document.getElementById("cart-fab");
+  document.getElementById("cart-count-badge").textContent = cart.length;
+  fab.classList.toggle("empty", cart.length === 0);
+
+  // Update footer
+  document.getElementById("cart-total-qty").textContent = totalQty.toLocaleString("en-IN");
+  document.getElementById("submit-btn").disabled = cart.length === 0;
+
+  // Render items
+  const body = document.getElementById("cart-body");
+  if (cart.length === 0) {
+    body.innerHTML = `<div class="cart-empty"><div class="icon">🛒</div><div>Cart khali hai</div><div style="font-size:11px; margin-top:8px">Items add karne ke liye inventory pe click karo</div></div>`;
+    return;
+  }
+  body.innerHTML = cart.map((c, i) => `
+    <div class="cart-item">
+      <div class="cart-item-name">${c.name}</div>
+      <div class="cart-item-model">${c.model}</div>
+      <div class="cart-item-row">
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
+          <input type="number" class="qty-input" value="${c.qty}" min="1" onchange="setQty(${i}, this.value)" />
+          <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
+        </div>
+        <button class="cart-remove" onclick="removeFromCart(${i})" title="Remove">×</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function changeQty(i, delta) {
+  cart[i].qty = Math.max(1, cart[i].qty + delta);
+  saveCartToStorage();
+  renderCart();
+}
+function setQty(i, val) {
+  const n = parseInt(val, 10);
+  cart[i].qty = Math.max(1, isNaN(n) ? 1 : n);
+  saveCartToStorage();
+  renderCart();
+}
+function removeFromCart(i) {
+  cart.splice(i, 1);
+  saveCartToStorage();
+  renderCart();
+}
+
+// ============================================================
+// SUBMIT ORDER (POST to Apps Script)
+// ============================================================
+async function submitOrder() {
+  if (cart.length === 0) return;
+  const btn = document.getElementById("submit-btn");
+  btn.disabled = true;
+  btn.textContent = "Submitting…";
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "addOrders", orders: cart }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || "Submit failed");
+
+    toast(`✓ ${json.added} orders submitted!`, "success");
+    cart = [];
+    saveCartToStorage();
+    renderCart();
+    toggleCart();
+    // Refresh orders list if user is on orders view
+    if (currentView === "orders") loadOrders(false);
+    else loadOrders(false); // also fetch in background so badge updates
+  } catch (err) {
+    toast("Error: " + err.message, "error");
+  } finally {
+    btn.disabled = cart.length === 0;
+    btn.textContent = "Submit Order";
+  }
+}
+
+// ============================================================
+// ORDERS VIEW
+// ============================================================
+async function loadOrders(showLoader = true) {
+  if (showLoader) toast("Loading orders…");
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + "?action=orders", { method: "GET" });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || "Failed");
+    orders = json.orders || [];
+    renderOrders();
+    if (showLoader) toast(`✓ ${orders.length} orders loaded`, "success");
+  } catch (err) {
+    toast("Error: " + err.message, "error");
+  }
+}
+
+// Strip trailing "-N" from old-format order IDs (ORD-timestamp-N) so they group
+// together. New format (ORD-timestamp) stays unchanged.
+function getOrderGroupKey(orderId) {
+  const parts = String(orderId).split("-");
+  // Old format: ORD-timestamp-N → 3 parts → group by ORD-timestamp
+  if (parts.length === 3 && /^\d+$/.test(parts[2])) {
+    return parts[0] + "-" + parts[1];
+  }
+  return orderId;
+}
+
+function formatDateKey(dateStr) {
+  // Returns "YYYY-MM-DD" used as filter key
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "";
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+function formatDateLabel(dateStr) {
+  if (!dateStr) return "—";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "—";
+  const today = new Date(); today.setHours(0,0,0,0);
+  const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+  const target = new Date(d); target.setHours(0,0,0,0);
+  if (target.getTime() === today.getTime()) return "Today · " + d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+  if (target.getTime() === yesterday.getTime()) return "Yesterday · " + d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "2-digit", weekday: "short" });
+}
+
+function renderOrders() {
+  // ---- Group orders by smart group key (handles old + new format) ----
+  const groups = {};
+  orders.forEach(o => {
+    const key = getOrderGroupKey(o.id);
+    if (!groups[key]) {
+      groups[key] = {
+        id: key,            // display this as the "Order ID"
+        date: o.date,
+        status: o.status,
+        items: []
+      };
+    }
+    groups[key].items.push({
+      name: o.name,
+      model: o.model,
+      qty: o.qty,
+      notes: o.notes,
+      _rawId: o.id          // keep the actual sheet row id (for back-end ops)
+    });
+  });
+  let groupList = Object.values(groups);
+  // Sort newest first
+  groupList.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+  // ---- Build date filter dropdown ----
+  const dateCounts = {};
+  groupList.forEach(g => {
+    const k = formatDateKey(g.date);
+    if (!k) return;
+    dateCounts[k] = (dateCounts[k] || 0) + 1;
+  });
+  const dateSel = document.getElementById("order-date-filter");
+  const prevValue = dateSel.value || "all";
+  const sortedDates = Object.keys(dateCounts).sort().reverse();
+  const totalAll = groupList.length;
+  dateSel.innerHTML =
+    `<option value="all">All Dates  (${totalAll})</option>` +
+    sortedDates.map(k => {
+      const label = formatDateLabel(k + "T12:00:00");
+      return `<option value="${k}">${label}  (${dateCounts[k]})</option>`;
+    }).join("");
+  // Restore previous selection if still valid
+  if (prevValue !== "all" && dateCounts[prevValue]) {
+    dateSel.value = prevValue;
+  } else {
+    dateSel.value = "all";
+  }
+
+  // ---- Apply date filter ----
+  const selectedDate = dateSel.value;
+  let filteredGroups = groupList;
+  if (selectedDate !== "all") {
+    filteredGroups = groupList.filter(g => formatDateKey(g.date) === selectedDate);
+  }
+
+  // ---- Update stats ----
+  const totalItems = filteredGroups.reduce((s, g) => s + g.items.length, 0);
+  const totalQty = filteredGroups.reduce((s, g) => s + g.items.reduce((a, it) => a + it.qty, 0), 0);
+  document.getElementById("orders-count").textContent = filteredGroups.length.toLocaleString("en-IN");
+  document.getElementById("orders-items-count").textContent = totalItems.toLocaleString("en-IN");
+  document.getElementById("orders-qty-count").textContent = totalQty.toLocaleString("en-IN");
+
+  // Update tab badge with TOTAL (not filtered) so user always knows actual count
+  const badge = document.getElementById("orders-tab-badge");
+  if (groupList.length > 0) {
+    badge.style.display = "inline-block";
+    badge.textContent = groupList.length;
+  } else {
+    badge.style.display = "none";
+  }
+
+  const tbody = document.getElementById("orders-tbody");
+  if (filteredGroups.length === 0) {
+    const msg = selectedDate === "all"
+      ? `<h3>Koi order nahi</h3><p>Inventory se items add karke order submit karo</p>`
+      : `<h3>Is date pe koi order nahi</h3><p>Date filter change karo</p>`;
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">${msg}</td></tr>`;
+    return;
+  }
+
+  const statuses = ["Pending", "Process", "Hold", "Cancelled", "Completed"];
+
+  tbody.innerHTML = filteredGroups.map(g => {
+    const dateStr = g.date ? new Date(g.date).toLocaleString("en-IN", { day: "2-digit", month: "short", year: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—";
+    const groupTotalQty = g.items.reduce((s, i) => s + i.qty, 0);
+    const statusOpts = statuses.map(s =>
+      `<option value="${s}" ${s === g.status ? "selected" : ""}>${s}</option>`
+    ).join("");
+    const safeId = String(g.id).replace(/[^A-Za-z0-9_-]/g, "_");
+    const rawIds = g.items.map(it => it._rawId).join(",");
+
+    const itemsRows = g.items.map(it => `
+      <tr>
+        <td class="model">${escapeHtml(it.model || "—")}</td>
+        <td>${escapeHtml(it.name)}</td>
+        <td class="num">${it.qty.toLocaleString("en-IN")}</td>
+      </tr>
+    `).join("");
+
+    return `
+      <tr class="order-summary" data-order="${safeId}" onclick="toggleOrderExpand('${safeId}', event)">
+        <td>
+          <button class="expand-btn" id="exp-${safeId}" onclick="event.stopPropagation(); toggleOrderExpand('${safeId}')">▶</button>
+        </td>
+        <td>
+          <div class="order-date">${dateStr}</div>
+          <div class="order-id">${g.id}</div>
+        </td>
+        <td class="num"><span class="order-item-count">${g.items.length}</span></td>
+        <td class="num">${groupTotalQty.toLocaleString("en-IN")}</td>
+        <td>
+          <select class="status-select status-${g.status}" data-rawids="${rawIds}" onclick="event.stopPropagation()" onchange="updateGroupStatus('${g.id}', this.value, this)">
+            ${statusOpts}
+          </select>
+        </td>
+        <td class="action-cell">
+          <button class="delete-order-btn" data-rawids="${rawIds}" onclick="event.stopPropagation(); deleteGroupConfirm('${g.id}', this)" title="Delete order">🗑</button>
+        </td>
+      </tr>
+      <tr class="order-details" id="det-${safeId}" style="display:none">
+        <td colspan="6">
+          <div class="items-inner">
+            <div class="items-inner-title">Order Items (${g.items.length})</div>
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th style="width:160px">Model</th>
+                  <th>Description</th>
+                  <th class="num" style="width:80px">Qty</th>
+                </tr>
+              </thead>
+              <tbody>${itemsRows}</tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function toggleOrderExpand(safeId, e) {
+  if (e) e.stopPropagation();
+  const det = document.getElementById("det-" + safeId);
+  const btn = document.getElementById("exp-" + safeId);
+  if (!det || !btn) return;
+  const isOpen = det.style.display !== "none";
+  det.style.display = isOpen ? "none" : "table-row";
+  btn.classList.toggle("expanded", !isOpen);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+}
+
+async function updateGroupStatus(groupId, status, selectEl) {
+  selectEl.className = "status-select status-" + status;
+  const rawIds = (selectEl.dataset.rawids || "").split(",").filter(Boolean);
+  if (rawIds.length === 0) return;
+
+  try {
+    // Update each row that belongs to this group (handles old multi-row format)
+    const results = await Promise.all(rawIds.map(rid =>
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "updateStatus", orderId: rid, status }),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+      }).then(r => r.json())
+    ));
+    const allOk = results.every(r => r.ok);
+    if (!allOk) {
+      const err = results.find(r => !r.ok);
+      throw new Error(err ? err.error : "Some updates failed");
+    }
+    // Update local state for all rows in this group
+    orders.forEach(o => {
+      if (getOrderGroupKey(o.id) === groupId) o.status = status;
+    });
+    toast(`✓ ${rawIds.length} item(s) → ${status}`, "success");
+  } catch (err) {
+    toast("Error: " + err.message, "error");
+    loadOrders(false);
+  }
+}
+
+async function deleteGroupConfirm(groupId, btnEl) {
+  if (!confirm("Yeh poora order delete karna hai? Saare items remove ho jayenge.")) return;
+  const rawIds = (btnEl.dataset.rawids || "").split(",").filter(Boolean);
+  if (rawIds.length === 0) return;
+
+  try {
+    const results = await Promise.all(rawIds.map(rid =>
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "deleteOrder", orderId: rid }),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+      }).then(r => r.json())
+    ));
+    const allOk = results.every(r => r.ok);
+    if (!allOk) {
+      const err = results.find(r => !r.ok);
+      throw new Error(err ? err.error : "Some deletions failed");
+    }
+    orders = orders.filter(o => getOrderGroupKey(o.id) !== groupId);
+    renderOrders();
+    toast(`✓ Order deleted (${rawIds.length} items)`, "success");
+  } catch (err) {
+    toast("Error: " + err.message, "error");
+    loadOrders(false);
+  }
+}
+
+// Legacy: kept for any single-order callers (still used by no one now, but safe)
+async function updateStatus(orderId, status, selectEl) {
+  selectEl.className = "status-select status-" + status;
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "updateStatus", orderId, status }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || "Update failed");
+    orders.forEach(o => { if (o.id === orderId) o.status = status; });
+    toast(`✓ ${status}`, "success");
+  } catch (err) {
+    toast("Error: " + err.message, "error");
+    loadOrders(false);
+  }
+}
+
+async function deleteOrderConfirm(orderId) {
+  if (!confirm("Yeh order delete karna hai?")) return;
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "deleteOrder", orderId }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || "Delete failed");
+    orders = orders.filter(o => o.id !== orderId);
+    renderOrders();
+    toast("✓ Order deleted", "success");
+  } catch (err) {
+    toast("Error: " + err.message, "error");
+  }
+}
+
+// ============================================================
+// VIEW SWITCHING
+// ============================================================
+let currentView = "inventory";
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + view));
+  if (view === "orders") loadOrders(false);
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function toast(msg, type) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
 }
 
 // ============================================================
@@ -769,6 +1727,17 @@ document.addEventListener("DOMContentLoaded", () => {
     render();
   });
   init();
+
+  // Escape key closes modal/cart
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      if (document.getElementById("add-modal").classList.contains("open")) {
+        document.getElementById("add-modal").classList.remove("open");
+      } else if (document.getElementById("cart-panel").classList.contains("open")) {
+        toggleCart();
+      }
+    }
+  });
 });
 </script>
 
